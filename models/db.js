@@ -11,8 +11,10 @@ db.once('connected', () => {
 })
 
 const articlesSchema = new mongoose.Schema({})
+const issuesSchema = new mongoose.Schema({ no: Number})
 
 const Articles = mongoose.model("Articles", articlesSchema, "articles");
+const Issues = mongoose.model("Issues", issuesSchema, "issues")
 
 
-module.exports = { Articles }
+module.exports = { Articles, Issues }
