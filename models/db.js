@@ -11,10 +11,13 @@ db.once('connected', () => {
 })
 
 const articlesSchema = new mongoose.Schema({})
-const issuesSchema = new mongoose.Schema({ no: Number})
+const issuesSchema = new mongoose.Schema({ no: Number })
+const eicsSchema = new mongoose.Schema({ username: String, password: String} )
 
 const Articles = mongoose.model("Articles", articlesSchema, "articles");
 const Issues = mongoose.model("Issues", issuesSchema, "issues")
+const Eics = mongoose.model("Eics", eicsSchema, "eics")
 
 
-module.exports = { Articles, Issues }
+
+module.exports = { Articles, Issues, Eics }
