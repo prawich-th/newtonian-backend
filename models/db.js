@@ -12,7 +12,7 @@ db.once('connected', () => {
     console.log('Database Connected');
 })
 
-const articlesSchema = new mongoose.Schema({ categories: String})
+const articlesSchema = new mongoose.Schema({ categories: String, title: String, text: String, author: Object, date: Date, image: String}, {versionKey: false})
 const issuesSchema = new mongoose.Schema({ no: Number })
 const eicsSchema = new mongoose.Schema({ username: String, password: String} )
 const memberSchema = new mongoose.Schema({ _id: ObjectId, name: String, position: Array, image: String, signature: String, articles: Array} )

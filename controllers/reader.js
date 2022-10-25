@@ -60,6 +60,9 @@ router.get("/issue/getIssue/:issueNo", async (req, res) => {
   }
 });
 
+/**
+ * Endpoint /api/reader/article/get-homepage-data
+ */
 router.get("/get-homepage-data", async (req, res) => {
   try {
     var articles = await Articles.find({}).limit(7).sort({date: -1});
@@ -87,6 +90,10 @@ router.get("/get-homepage-data", async (req, res) => {
     res.status(500).json({ error });
   }
 });
+
+/**
+ * Endpoint /api/reader/article/all-articles
+ */
 
 router.get("/all-articles", async (req, res) => {
     try {
