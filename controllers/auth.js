@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const { Eics } = require("../models/db");
 
 /**
- * Endpoint /api/auth/sign
+ * Endpoint /api/auth/signin
  */
 router.post("/signin", async function signin(req, res, next) {
   try {
