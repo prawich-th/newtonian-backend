@@ -88,4 +88,37 @@ router.get("/get-homepage-data", async (req, res) => {
   }
 });
 
+router.get("/all-articles", async (req, res) => {
+    try {
+        const articles = await Articles.find({})
+
+        console.log(articles)
+
+        let allArticles =  {
+            "Interview": [],
+            "SchoolUpdate": [],
+            "AdviceEssay": [],
+            "Fiction": [],
+            "PerformingArts": [],
+            "VisualArts": [],
+            "Review": [],
+            "NBS": [],
+            "Letter": []
+        }
+
+        for (let article of articles) {
+            allArticles[article.categories].push(article)
+        }
+
+        res.status(200).json(allArticles);
+
+
+        
+
+    } catch (error) {
+        console.log(error);
+    res.status(500).json({ error });
+    }
+})
+
 module.exports = router;
