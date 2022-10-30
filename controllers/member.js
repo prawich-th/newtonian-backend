@@ -1,50 +1,43 @@
-const express = require("express")
-const router = express.Router()
-const { Members, Articles } = require("../models/db")
+const express = require("express");
+const router = express.Router();
+const { Members, Articles } = require("../models/db");
 
 router.get("/members", async (req, res) => {
-    try {
-        let members = await Members.find()
+  try {
+    let members = await Members.find({}, "-articles");
 
-        const membersData = []
-
-        for (member of members) {
-            membersData.push({ id: member._id, name: member.name, position: member.position, image: member.image})
-        }
-
-        res.status(200).json(membersData)
-    } catch (error) {
-        res.status(500).json({error})
-        
-    }
-    
-})
+    res.status(200).json(members);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+});
 
 router.get("/:memberId", async (req, res) => {
-    try {
-        if (!req.params.memberId) {
-            res.status(400).json({ "message": "provide a member id" })
-        } else {
-            let member = await Members.findById(req.params.memberId)
+  try {
+    if (!req.params.memberId) {
+      res.status(400).json({ message: "provide a member id" });
+    } else {
+      let member = await Members.findById(req.params.memberId);
 
-            let memberData = { id: member._id, name: member.name, position: member.position, image: member.image, signature: member.signature, articles: []}
-            
+      const articlesByMember = await Articles.find({ author: member._id });
 
-            for (articleId of member.articles) {
-                memberData.articles.push(await Articles.findById(articleId))
-            }
+      let memberData = {
+        _id: member._id,
+        name: member.name,
+        position: member.position,
+        image: member.image,
+        signature: member.signature,
+        year: member.year,
+        track: member.track,
+        bio: member.bio,
+        articles: articlesByMember,
+      };
 
-            res.status(200).json(memberData)
-            
-        }
-        
-    } catch (error) {
-        res.status(500).json({error})
-        
-    }    
-    
+      res.status(200).json(memberData);
+    }
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+});
 
-
-})
-
-module.exports = router
+module.exports = router;

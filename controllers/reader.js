@@ -10,12 +10,19 @@ const { mainId } = require("../models/mainArticle.json");
 
 router.get("/article/:articleId", async (req, res) => {
   try {
+    console.info(
+      "Answering the the query for article: " + req.params.articleId
+    );
     if (req.params.articleId.length != 24) {
       res
         .status(400)
         .json({ msg: "please provide correct articleId in params" });
     } else {
-      const article = await Articles.findById(req.params.articleId);
+      const article = await Articles.findById(req.params.articleId).populate(
+        "author",
+        "name _id"
+      );
+
       res.status(200).json(article);
     }
   } catch (error) {
@@ -65,26 +72,28 @@ router.get("/issue/getIssue/:issueNo", async (req, res) => {
  */
 router.get("/get-homepage-data", async (req, res) => {
   try {
-    var articles = await Articles.find({}).limit(7).sort({date: -1});
-    const mainArticleId = new ObjectId(mainId)
+    var articles = await Articles.find()
+      .limit(7)
+      .sort({ date: -1 })
+      .populate("author", "name _id");
+    const mainArticleId = new ObjectId(mainId);
 
     for (let article of articles) {
-        if (article._id.equals(mainArticleId)) {
-            articles = articles.filter((item) => !item._id.equals(mainArticleId))
-            break
-        }
+      if (article._id.equals(mainArticleId)) {
+        articles = articles.filter((item) => !item._id.equals(mainArticleId));
+        break;
+      }
     }
 
     if (articles.length > 6) {
-        articles.pop()
+      articles.pop();
     }
 
     const homepage = {
-        "main": await Articles.findById(mainId),
-        "other": articles
-    }
+      main: await Articles.findById(mainId).populate("author", "name _id"),
+      other: articles,
+    };
     res.status(200).json(homepage);
-
   } catch (error) {
     console.log(error);
     res.status(500).json({ error });
@@ -96,36 +105,32 @@ router.get("/get-homepage-data", async (req, res) => {
  */
 
 router.get("/all-articles", async (req, res) => {
-    try {
-        const articles = await Articles.find({})
+  try {
+    const articles = await Articles.find();
 
-        console.log(articles)
+    console.log(articles);
 
-        let allArticles =  {
-            "Interview": [],
-            "SchoolUpdate": [],
-            "AdviceEssay": [],
-            "Fiction": [],
-            "PerformingArts": [],
-            "VisualArts": [],
-            "Review": [],
-            "NBS": [],
-            "Letter": []
-        }
+    let allArticles = {
+      Interview: [],
+      SchoolUpdate: [],
+      AdviceEssay: [],
+      Fiction: [],
+      PerformingArts: [],
+      VisualArts: [],
+      Review: [],
+      NBS: [],
+      Letter: [],
+    };
 
-        for (let article of articles) {
-            allArticles[article.categories].push(article)
-        }
-
-        res.status(200).json(allArticles);
-
-
-        
-
-    } catch (error) {
-        console.log(error);
-    res.status(500).json({ error });
+    for (let article of articles) {
+      allArticles[article.categories].push(article);
     }
-})
+
+    res.status(200).json(allArticles);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error });
+  }
+});
 
 module.exports = router;
