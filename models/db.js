@@ -26,7 +26,10 @@ const articlesSchema = new mongoose.Schema(
   },
   { versionKey: false }
 );
-const issuesSchema = new mongoose.Schema({ no: Number });
+const issuesSchema = new mongoose.Schema({
+  no: Number,
+  articles: [{ type: mongoose.Types.ObjectId, ref: "Members" }],
+});
 const eicsSchema = new mongoose.Schema({
   username: String,
   password: String,

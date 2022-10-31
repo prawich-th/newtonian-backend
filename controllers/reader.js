@@ -56,10 +56,24 @@ router.get("/issue/getIssue/:issueNo", async (req, res) => {
     const issue = await Issues.findOne({
       no: { $in: [parseInt(req.params.issueNo)] },
     });
+    const articleList = [];
+
     if (!issue) {
       res.status(404).json({ message: "Issue not found" });
     } else {
-      res.status(200).json(issue);
+      for (const article of issue.articles) {
+        const farticle = await Articles.findById(article, "-text").populate(
+          "author",
+          "_id name"
+        );
+        articleList.push(farticle);
+      }
+
+      res.status(200).json({
+        no: 1,
+        letters: issue.letters,
+        articles: articleList,
+      });
     }
   } catch (error) {
     console.log(error);
