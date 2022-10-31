@@ -19,7 +19,9 @@ router.get("/:memberId", async (req, res) => {
     } else {
       let member = await Members.findById(req.params.memberId);
 
-      const articlesByMember = await Articles.find({ author: member._id });
+      const articlesByMember = await Articles.find({
+        author: member._id,
+      }).populate("author", "_id name");
 
       let memberData = {
         _id: member._id,

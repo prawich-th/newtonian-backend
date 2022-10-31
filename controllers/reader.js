@@ -76,6 +76,7 @@ router.get("/get-homepage-data", async (req, res) => {
       .limit(7)
       .sort({ date: -1 })
       .populate("author", "name _id");
+
     const mainArticleId = new ObjectId(mainId);
 
     for (let article of articles) {
@@ -93,6 +94,7 @@ router.get("/get-homepage-data", async (req, res) => {
       main: await Articles.findById(mainId).populate("author", "name _id"),
       other: articles,
     };
+
     res.status(200).json(homepage);
   } catch (error) {
     console.log(error);
@@ -106,7 +108,7 @@ router.get("/get-homepage-data", async (req, res) => {
 
 router.get("/all-articles", async (req, res) => {
   try {
-    const articles = await Articles.find();
+    const articles = await Articles.find().populate("author", "_id name");
 
     console.log(articles);
 
@@ -120,6 +122,7 @@ router.get("/all-articles", async (req, res) => {
       Review: [],
       NBS: [],
       Letter: [],
+      Research: [],
     };
 
     for (let article of articles) {
