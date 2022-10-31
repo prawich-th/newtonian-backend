@@ -53,26 +53,26 @@ router.get("/issue/getIssue/:issueNo", async (req, res) => {
     if (!req.params.issueNo) {
       res.status(400).json({ message: "Please provide an issue number" });
     }
-    const issue = await Issues.findOne({
+    let issue = await Issues.findOne({
       no: { $in: [parseInt(req.params.issueNo)] },
     });
+    console.log(issue.articleIds);
     const articleList = [];
-
     if (!issue) {
       res.status(404).json({ message: "Issue not found" });
     } else {
-      for (const article of issue.articles) {
+      for (const article of issue.articleIds) {
         const farticle = await Articles.findById(article, "-text").populate(
           "author",
           "_id name"
         );
         articleList.push(farticle);
       }
-
+      console.log(articleList);
       res.status(200).json({
-        no: 1,
-        letters: issue.letters,
+        no: issue.no,
         articles: articleList,
+        letters: issue.letters,
       });
     }
   } catch (error) {
