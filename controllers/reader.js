@@ -56,7 +56,7 @@ router.get("/issue/getIssue/:issueNo", async (req, res) => {
     let issue = await Issues.findOne({
       no: { $in: [parseInt(req.params.issueNo)] },
     });
-    console.log(issue.articleIds);
+    console.log(issue);
     const articleList = [];
     if (!issue) {
       res.status(404).json({ message: "Issue not found" });
@@ -68,7 +68,6 @@ router.get("/issue/getIssue/:issueNo", async (req, res) => {
         );
         articleList.push(farticle);
       }
-      console.log(articleList);
       res.status(200).json({
         no: issue.no,
         articles: articleList,

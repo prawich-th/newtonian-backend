@@ -29,7 +29,7 @@ const articlesSchema = new mongoose.Schema(
 const issuesSchema = new mongoose.Schema({
   no: Number,
   articleIds: [{ type: mongoose.Types.ObjectId }],
-  letters: [{ type: mongoose.Types.ObjectId }],
+  letters: Object,
 });
 const eicsSchema = new mongoose.Schema({
   username: String,
