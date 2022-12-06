@@ -18,10 +18,10 @@ router.get("/article/:articleId", async (req, res) => {
         .status(400)
         .json({ msg: "please provide correct articleId in params" });
     } else {
-      const article = await Articles.findById(req.params.articleId).populate(
-        "author",
-        "name _id"
-      );
+      const article = await Articles.findOne({
+        _id: req.params.articleId,
+        publish: true,
+      }).populate("author", "name _id");
 
       res.status(200).json(article);
     }
@@ -36,7 +36,7 @@ router.get("/article/:articleId", async (req, res) => {
  */
 router.get("/issue/getIssues", async (req, res) => {
   try {
-    var issues = await Issues.find({}, "no date cover");
+    var issues = await Issues.find({ publish: true }, "no date cover");
 
     res.status(200).json(issues);
   } catch (error) {
@@ -55,8 +55,9 @@ router.get("/issue/getIssue/:issueNo", async (req, res) => {
     }
     let issue = await Issues.findOne({
       no: { $in: [parseInt(req.params.issueNo)] },
+      publish: true,
     });
-    console.log(issue);
+
     const articleList = [];
     if (!issue) {
       res.status(404).json({ message: "Issue not found" });
@@ -72,6 +73,7 @@ router.get("/issue/getIssue/:issueNo", async (req, res) => {
         no: issue.no,
         articles: articleList,
         letters: issue.letters,
+        publishingDate: issue.date,
       });
     }
   } catch (error) {
@@ -88,7 +90,7 @@ router.get("/get-homepage-data", async (req, res) => {
     const articleAmount = req.query.amo || 8;
 
     var articles = await Articles.find()
-      .limit(articleAmount)
+      .limit(articleAmount + 1)
       .sort({ date: -1 })
       .populate("author", "name _id");
 
@@ -120,10 +122,12 @@ router.get("/get-homepage-data", async (req, res) => {
 /**
  * Endpoint /api/reader/article/all-articles
  */
-
 router.get("/all-articles", async (req, res) => {
   try {
-    const articles = await Articles.find().populate("author", "_id name");
+    const articles = await Articles.find({ publish: true }).populate(
+      "author",
+      "_id name"
+    );
 
     console.log(articles);
 

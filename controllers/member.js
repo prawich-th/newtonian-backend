@@ -21,6 +21,7 @@ router.get("/:memberId", async (req, res) => {
 
       const articlesByMember = await Articles.find({
         author: member._id,
+        publish: true,
       }).populate("author", "_id name");
 
       let memberData = {

@@ -23,13 +23,15 @@ const articlesSchema = new mongoose.Schema(
     author: { type: mongoose.Types.ObjectId, ref: "Members" },
     date: Date,
     image: String,
+    publish: { type: Boolean, default: false },
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 const issuesSchema = new mongoose.Schema({
   no: Number,
   articleIds: [{ type: mongoose.Types.ObjectId }],
   letters: Object,
+  publish: { type: Boolean, default: false },
 });
 const eicsSchema = new mongoose.Schema({
   username: String,
