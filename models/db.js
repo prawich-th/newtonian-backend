@@ -31,6 +31,7 @@ const issuesSchema = new mongoose.Schema({
   no: Number,
   articleIds: [{ type: mongoose.Types.ObjectId }],
   letters: Object,
+  date: String,
   publish: { type: Boolean, default: false },
 });
 const eicsSchema = new mongoose.Schema({
