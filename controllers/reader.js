@@ -85,6 +85,8 @@ router.get("/issue/getIssue/:issueNo", async (req, res) => {
  */
 router.get("/get-homepage-data", async (req, res) => {
   try {
+    const articleAmount = req.query.amo || 8;
+
     var articles = await Articles.find()
       .limit(7)
       .sort({ date: -1 })
