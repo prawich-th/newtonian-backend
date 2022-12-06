@@ -74,6 +74,7 @@ router.get("/issue/getIssue/:issueNo", async (req, res) => {
         articles: articleList,
         letters: issue.letters,
         publishingDate: issue.date,
+        pdf: issue.pdf,
       });
     }
   } catch (error) {
