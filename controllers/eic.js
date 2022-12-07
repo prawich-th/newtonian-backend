@@ -2,18 +2,13 @@ const express = require("express");
 const router = express.Router();
 const RouteProtection = require("../helpers/RouteProtection");
 const multer = require("multer");
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "./images");
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  },
-});
+const fs = require("fs");
+const path = require("path");
 const { Articles, Members } = require("../models/db");
+const { memoryStorage } = require("multer");
+const sharp = require("sharp");
 
-const upload = multer({ storage: storage });
-
+const upload = multer({ storage: memoryStorage() });
 /**
  * Endpoint /api/eic/upload-image
  * the fieldname of the file is "image"
@@ -27,9 +22,15 @@ router.post(
       if (!req.file) {
         res.status(400).json({ message: "provide an image" });
       } else {
-        res.status(200).json({ path: req.file.path });
+        const path = `/images${req.body.path}`;
+        const filename =
+          req.body.filename || req.file.originalname.split(".")[0];
+        fs.mkdirSync(`.${path}`, { recursive: true });
+        await sharp(req.file.buffer).webp().toFile(`.${path}/${filename}.webp`);
+        res.status(200).json({ path: `${path}/${filename}.webp` });
       }
     } catch (error) {
+      console.log(error);
       res.status(500).json({ error });
     }
   }
