@@ -45,6 +45,7 @@ router.post("/new-article", RouteProtection.verify, async (req, res) => {
   try {
     const { title, text, image, categories, authorId } = req.body;
 
+    console.log(req);
     if (!title || !text || !image || !categories)
       throw new Error("Missing required argument(s)");
 

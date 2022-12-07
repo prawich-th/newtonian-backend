@@ -90,7 +90,7 @@ router.get("/get-homepage-data", async (req, res) => {
   try {
     const articleAmount = req.query.amo || 8;
 
-    var articles = await Articles.find()
+    var articles = await Articles.find({ publish: true })
       .limit(articleAmount + 1)
       .sort({ date: -1 })
       .populate("author", "name _id");
