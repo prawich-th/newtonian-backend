@@ -45,7 +45,6 @@ router.post("/new-article", RouteProtection.verify, async (req, res) => {
   try {
     const { title, text, image, categories, authorId } = req.body;
 
-    console.log(req);
     if (!title || !text || !image || !categories)
       throw new Error("Missing required argument(s)");
 
@@ -66,7 +65,7 @@ router.post("/new-article", RouteProtection.verify, async (req, res) => {
     res.status(200).json({ msg: "success" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error });
+    res.status(500).json({ error: error.msg });
   }
 });
 module.exports = router;
