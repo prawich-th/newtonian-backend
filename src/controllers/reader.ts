@@ -91,12 +91,17 @@ export const getHomePageData: RequestHandler = async (req, res, next) => {
       orderBy: {
         id: "desc",
       },
-      select: {
+      include: {
         main: {
-          include: { member: true },
-        },
-        articles: {
-          include: { member: true },
+          include: {
+            member: {
+              select: {
+                name: true,
+                id: true,
+                nickname: true,
+              },
+            },
+          },
         },
       },
     });
@@ -105,6 +110,15 @@ export const getHomePageData: RequestHandler = async (req, res, next) => {
 
     const articles = await prisma.articles.findMany({
       where: { published: true, id: { not: thisIssue.main.id } },
+      include: {
+        member: {
+          select: {
+            name: true,
+            id: true,
+            nickname: true,
+          },
+        },
+      },
       orderBy: {
         publishingDate: "desc",
       },
