@@ -96,12 +96,17 @@ const getHomePageData = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             orderBy: {
                 id: "desc",
             },
-            select: {
+            include: {
                 main: {
-                    include: { member: true },
-                },
-                articles: {
-                    include: { member: true },
+                    include: {
+                        member: {
+                            select: {
+                                name: true,
+                                id: true,
+                                nickname: true,
+                            },
+                        },
+                    },
                 },
             },
         });
@@ -109,6 +114,15 @@ const getHomePageData = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
             throw new Error("Something went wrong");
         const articles = yield db_1.prisma.articles.findMany({
             where: { published: true, id: { not: thisIssue.main.id } },
+            include: {
+                member: {
+                    select: {
+                        name: true,
+                        id: true,
+                        nickname: true,
+                    },
+                },
+            },
             orderBy: {
                 publishingDate: "desc",
             },
