@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model members {
+  id           Int            @id @default(autoincrement())
+  name         String         @unique
+  nickname     String
+  role         String
+  profile      String
+  signature    String
+  bio          String
+  permission   Int            @default(0)
+  password     String?
+  status       String         @default("ACTI") @db.Char(4)
+  memberSince  DateTime       @default(now())
+  articles     articles[]
+  letterSigner letterSigner[]
+}
+
+model articles {
+  id             Int      @id @default(autoincrement())
+  headline       String   @unique
+  content        String   @db.Text
+  cover          String
+  publishingDate DateTime @default(now())
+  published      Boolean  @default(false)
+  category       String   @default("other")
+  member         members  @relation(fields: [membersId], references: [id])
+  membersId      Int
+  views          Int      @default(0)
+  issue          issues?  @relation(fields: [issuesId], references: [id])
+  issuesId       Int?
+  main           issues?  @relation("main-article")
+}
+
+model issues {
+  id             Int        @id @default(autoincrement())
+  cover          String
+  publishingDate DateTime   @default(now())
+  published      Boolean    @default(false)
+  letter         letters?   @relation(fields: [lettersId], references: [id])
+  articles       articles[]
+  main           articles?  @relation("main-article", fields: [mainArticlesId], references: [id])
+  lettersId      Int?
+  mainArticlesId Int?       @unique
+}
+
+model letters {
+  id           Int            @id @default(autoincrement())
+  sender       String
+  content      String         @db.Text
+  letterSigner letterSigner[]
+
+  issues issues[]
+}
+
+model letterSigner {
+  letters   letters  @relation(fields: [lettersId], references: [id])
+  lettersId Int
+  members   members  @relation(fields: [membersId], references: [id])
+  membersId Int
+  signedAt  DateTime @default(now())
+
+  @@id([lettersId, membersId])
+}

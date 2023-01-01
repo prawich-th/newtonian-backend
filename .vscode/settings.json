@@ -1,0 +1,17 @@
+{
+  "sqltools.connections": [
+    {
+      "mysqlOptions": {
+        "authProtocol": "default"
+      },
+      "previewLimit": 50,
+      "server": "voicenote.xeersoft.co.th",
+      "port": 19908,
+      "askForPassword": true,
+      "driver": "MySQL",
+      "name": "thenewtonian",
+      "database": "thenewtonian",
+      "username": "prawichth"
+    }
+  ]
+}
