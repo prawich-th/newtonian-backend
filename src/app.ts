@@ -33,7 +33,7 @@ app.use(
     extended: true,
   })
 );
-app.use("/images", express.static(path.join("images")));
+app.use("/images", express.static(path.join(__dirname, "..", "images")));
 const upload = multer({ storage: memoryStorage() });
 app.use(upload.single("image"));
 
