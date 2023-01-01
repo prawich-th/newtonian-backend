@@ -97,7 +97,12 @@ const getHomePageData = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
                 id: "desc",
             },
             select: {
-                main: true,
+                main: {
+                    include: { member: true },
+                },
+                articles: {
+                    include: { member: true },
+                },
             },
         });
         if (!thisIssue || !thisIssue.main)

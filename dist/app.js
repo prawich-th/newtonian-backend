@@ -41,7 +41,7 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({
     extended: true,
 }));
-app.use("/images", express_1.default.static(path.join("images")));
+app.use("/images", express_1.default.static(path.join(__dirname, "..", "images")));
 const upload = (0, multer_1.default)({ storage: (0, multer_1.memoryStorage)() });
 app.use(upload.single("image"));
 app.use("/api", routes_1.default);

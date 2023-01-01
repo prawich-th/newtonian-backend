@@ -92,7 +92,12 @@ export const getHomePageData: RequestHandler = async (req, res, next) => {
         id: "desc",
       },
       select: {
-        main: true,
+        main: {
+          include: { member: true },
+        },
+        articles: {
+          include: { member: true },
+        },
       },
     });
 
