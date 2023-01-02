@@ -3,7 +3,16 @@ import { prisma } from "../models/db";
 
 export const getAllMembers: RequestHandler = async (req, res, next) => {
   try {
-    const members = await prisma.members.findMany();
+    const members = await prisma.members.findMany({
+      select: {
+        name: true,
+        nickname: true,
+        year: true,
+        track: true,
+        status: true,
+        profile: true,
+      },
+    });
 
     return res.json(members);
   } catch (error) {
@@ -17,7 +26,17 @@ export const getMember: RequestHandler = async (req, res, next) => {
 
     const member = await prisma.members.findFirst({
       where: { id: +memberId },
-      include: { articles: { where: { published: true } } },
+      select: {
+        articles: { where: { published: true } },
+        name: true,
+        nickname: true,
+        year: true,
+        track: true,
+        status: true,
+        profile: true,
+        signature: true,
+        bio: true,
+      },
     });
 
     res.json(member);

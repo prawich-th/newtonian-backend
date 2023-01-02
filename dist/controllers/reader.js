@@ -57,7 +57,7 @@ const getIssue = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
                     select: {
                         id: true,
                         headline: true,
-                        member: { select: { name: true } },
+                        member: { select: { name: true, id: true } },
                     },
                 },
                 letter: {

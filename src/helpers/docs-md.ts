@@ -170,5 +170,5 @@ const content = (
   const text = textRun?.content;
   if (textRun?.textStyle?.link?.url)
     return `[${text}]${textRun.textStyle.link.url}`;
-  return text || undefined;
+  return text?.trim() || undefined;
 };

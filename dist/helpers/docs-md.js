@@ -171,5 +171,5 @@ const content = (element) => {
     const text = textRun === null || textRun === void 0 ? void 0 : textRun.content;
     if ((_b = (_a = textRun === null || textRun === void 0 ? void 0 : textRun.textStyle) === null || _a === void 0 ? void 0 : _a.link) === null || _b === void 0 ? void 0 : _b.url)
         return `[${text}]${textRun.textStyle.link.url}`;
-    return text || undefined;
+    return (text === null || text === void 0 ? void 0 : text.trim()) || undefined;
 };

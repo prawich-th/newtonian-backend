@@ -51,7 +51,7 @@ export const getIssue: RequestHandler = async (req, res, next) => {
           select: {
             id: true,
             headline: true,
-            member: { select: { name: true } },
+            member: { select: { name: true, id: true } },
           },
         },
         letter: {

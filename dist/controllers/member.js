@@ -13,7 +13,16 @@ exports.getMember = exports.getAllMembers = void 0;
 const db_1 = require("../models/db");
 const getAllMembers = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const members = yield db_1.prisma.members.findMany();
+        const members = yield db_1.prisma.members.findMany({
+            select: {
+                name: true,
+                nickname: true,
+                year: true,
+                track: true,
+                status: true,
+                profile: true,
+            },
+        });
         return res.json(members);
     }
     catch (error) {
@@ -27,7 +36,17 @@ const getMember = (req, res, next) => __awaiter(void 0, void 0, void 0, function
         const memberId = (_a = req.params.id) !== null && _a !== void 0 ? _a : 1;
         const member = yield db_1.prisma.members.findFirst({
             where: { id: +memberId },
-            include: { articles: { where: { published: true } } },
+            select: {
+                articles: { where: { published: true } },
+                name: true,
+                nickname: true,
+                year: true,
+                track: true,
+                status: true,
+                profile: true,
+                signature: true,
+                bio: true,
+            },
         });
         res.json(member);
         // fetch member

@@ -16,6 +16,8 @@ model members {
   nickname     String
   role         String
   profile      String
+  year         Int            @default(11)
+  track        String?
   signature    String
   bio          String
   permission   Int            @default(0)
