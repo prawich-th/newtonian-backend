@@ -11,6 +11,10 @@ export const getAllMembers: RequestHandler = async (req, res, next) => {
         track: true,
         status: true,
         profile: true,
+        permission: true,
+      },
+      orderBy: {
+        permission: "desc",
       },
     });
 
@@ -36,6 +40,7 @@ export const getMember: RequestHandler = async (req, res, next) => {
         profile: true,
         signature: true,
         bio: true,
+        permission: true,
       },
     });
 

@@ -21,6 +21,10 @@ const getAllMembers = (req, res, next) => __awaiter(void 0, void 0, void 0, func
                 track: true,
                 status: true,
                 profile: true,
+                permission: true,
+            },
+            orderBy: {
+                permission: "desc",
             },
         });
         return res.json(members);
@@ -46,6 +50,7 @@ const getMember = (req, res, next) => __awaiter(void 0, void 0, void 0, function
                 profile: true,
                 signature: true,
                 bio: true,
+                permission: true,
             },
         });
         res.json(member);
