@@ -10,6 +10,7 @@ export const getAllMembers: RequestHandler = async (req, res, next) => {
         year: true,
         track: true,
         status: true,
+        role: true,
         profile: true,
         permission: true,
       },
@@ -41,6 +42,7 @@ export const getMember: RequestHandler = async (req, res, next) => {
         signature: true,
         bio: true,
         permission: true,
+        role: true,
       },
     });
 
