@@ -44,20 +44,13 @@ const uploadImage = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
             const path = `/images${req.body.path}`;
             const filename = req.body.filename || req.file.originalname.split(".")[0];
             fs_1.default.mkdirSync(`.${path}`, { recursive: true });
-            const f = yield (0, sharp_1.default)(req.file.buffer).webp().toBuffer();
-            s3.upload({
-                Bucket: "prawich-test-1",
-                Key: filename,
-                Body: f,
-            }, function (err, data) {
-                if (err)
-                    return console.error(err);
-                res.status(200).json({ path: data.Location });
-            });
+            yield (0, sharp_1.default)(req.file.buffer).webp().toFile(`.${path}/${filename}`);
+            res.status(201).json(`.${path}/${filename}`);
         }
     }
     catch (error) {
-        next(error);
+        console.log(error);
+        // next(error);
     }
 });
 exports.uploadImage = uploadImage;

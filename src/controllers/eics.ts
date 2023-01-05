@@ -26,21 +26,13 @@ export const uploadImage: RequestHandler = async (req, res, next) => {
       const path = `/images${req.body.path}`;
       const filename = req.body.filename || req.file.originalname.split(".")[0];
       fs.mkdirSync(`.${path}`, { recursive: true });
-      const f = await sharp(req.file.buffer).webp().toBuffer();
-      s3.upload(
-        {
-          Bucket: "prawich-test-1",
-          Key: filename,
-          Body: f,
-        },
-        function (err: any, data: any) {
-          if (err) return console.error(err);
-          res.status(200).json({ path: data.Location });
-        }
-      );
+      await sharp(req.file.buffer).webp().toFile(`.${path}/${filename}`);
+
+      res.status(201).json(`.${path}/${filename}`);
     }
   } catch (error) {
-    next(error);
+    console.log(error);
+    // next(error);
   }
 };
 
