@@ -29,19 +29,18 @@ model members {
 }
 
 model articles {
-  id             Int      @id @default(autoincrement())
-  headline       String   @unique
-  content        String   @db.Text
+  id             Int       @id @default(autoincrement())
+  headline       String    @unique
+  content        String    @db.Text
   cover          String
-  publishingDate DateTime @default(now())
-  published      Boolean  @default(false)
-  category       String   @default("other")
-  member         members  @relation(fields: [membersId], references: [id])
-  membersId      Int
-  views          Int      @default(0)
-  issue          issues?  @relation(fields: [issuesId], references: [id])
+  publishingDate DateTime  @default(now())
+  published      Boolean   @default(false)
+  category       String    @default("other")
+  member         members[]
+  views          Int       @default(0)
+  issue          issues?   @relation(fields: [issuesId], references: [id])
   issuesId       Int?
-  main           issues?  @relation("main-article")
+  main           issues?   @relation("main-article")
 }
 
 model issues {

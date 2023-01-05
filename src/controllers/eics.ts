@@ -1,9 +1,22 @@
 import { RequestHandler } from "express";
 import fs from "fs";
+import { MongoAWSError } from "mongodb";
 import sharp from "sharp";
 import { fetchGoogleDocsFiles } from "../helpers/docs-md";
 import newError from "../helpers/newError";
 import { prisma } from "../models/db";
+import { config } from "dotenv";
+config();
+
+import { S3 } from "aws-sdk";
+console.log(process.env.AWS_ACCESS_ID, process.env.AWS_ACCESS_SECRET);
+
+const s3 = new S3({
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_ID!,
+    secretAccessKey: process.env.AWS_ACCESS_SECRET!,
+  },
+});
 
 export const uploadImage: RequestHandler = async (req, res, next) => {
   try {
@@ -13,8 +26,18 @@ export const uploadImage: RequestHandler = async (req, res, next) => {
       const path = `/images${req.body.path}`;
       const filename = req.body.filename || req.file.originalname.split(".")[0];
       fs.mkdirSync(`.${path}`, { recursive: true });
-      await sharp(req.file.buffer).webp().toFile(`.${path}/${filename}.webp`);
-      res.status(200).json({ path: `${path}/${filename}.webp` });
+      const f = await sharp(req.file.buffer).webp().toBuffer();
+      s3.upload(
+        {
+          Bucket: "prawich-test-1",
+          Key: filename,
+          Body: f,
+        },
+        function (err: any, data: any) {
+          if (err) return console.error(err);
+          res.status(200).json({ path: data.Location });
+        }
+      );
     }
   } catch (error) {
     next(error);
@@ -46,7 +69,7 @@ export const newArticle: RequestHandler = async (req, res, next) => {
         headline: headline,
         content: content,
         issue: { connect: { id: +issueNo } },
-        member: { connect: { id: +writerId } },
+        member: { connect: [{ id: +writerId }] },
         cover: cover,
         category: category,
       },

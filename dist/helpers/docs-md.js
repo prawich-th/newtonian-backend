@@ -123,7 +123,8 @@ const googleDocsToMarkdown = (file) => {
     text = text
         .split("\n")
         .filter((_, i) => !linesToDelete.includes(i))
-        .join("\n");
+        .join("\n")
+        .replace("\t", "");
     return text.replace(/\n\s*\n\s*\n/g, "\n\n") + "\n";
 };
 exports.googleDocsToMarkdown = googleDocsToMarkdown;

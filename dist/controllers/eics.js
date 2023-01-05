@@ -25,6 +25,16 @@ const sharp_1 = __importDefault(require("sharp"));
 const docs_md_1 = require("../helpers/docs-md");
 const newError_1 = __importDefault(require("../helpers/newError"));
 const db_1 = require("../models/db");
+const dotenv_1 = require("dotenv");
+(0, dotenv_1.config)();
+const aws_sdk_1 = require("aws-sdk");
+console.log(process.env.AWS_ACCESS_ID, process.env.AWS_ACCESS_SECRET);
+const s3 = new aws_sdk_1.S3({
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_ID,
+        secretAccessKey: process.env.AWS_ACCESS_SECRET,
+    },
+});
 const uploadImage = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.file) {
@@ -34,8 +44,16 @@ const uploadImage = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
             const path = `/images${req.body.path}`;
             const filename = req.body.filename || req.file.originalname.split(".")[0];
             fs_1.default.mkdirSync(`.${path}`, { recursive: true });
-            yield (0, sharp_1.default)(req.file.buffer).webp().toFile(`.${path}/${filename}.webp`);
-            res.status(200).json({ path: `${path}/${filename}.webp` });
+            const f = yield (0, sharp_1.default)(req.file.buffer).webp().toBuffer();
+            s3.upload({
+                Bucket: "prawich-test-1",
+                Key: filename,
+                Body: f,
+            }, function (err, data) {
+                if (err)
+                    return console.error(err);
+                res.status(200).json({ path: data.Location });
+            });
         }
     }
     catch (error) {
@@ -65,7 +83,7 @@ const newArticle = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
                 headline: headline,
                 content: content,
                 issue: { connect: { id: +issueNo } },
-                member: { connect: { id: +writerId } },
+                member: { connect: [{ id: +writerId }] },
                 cover: cover,
                 category: category,
             },
