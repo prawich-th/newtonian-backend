@@ -33,7 +33,12 @@ export const getMember: RequestHandler = async (req, res, next) => {
     const member = await prisma.members.findFirst({
       where: { id: +memberId },
       select: {
-        articles: { where: { published: true } },
+        articles: {
+          where: { published: true },
+          include: {
+            member: { select: { id: true, name: true, nickname: true } },
+          },
+        },
         name: true,
         id: true,
         nickname: true,

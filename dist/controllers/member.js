@@ -43,7 +43,12 @@ const getMember = (req, res, next) => __awaiter(void 0, void 0, void 0, function
         const member = yield db_1.prisma.members.findFirst({
             where: { id: +memberId },
             select: {
-                articles: { where: { published: true } },
+                articles: {
+                    where: { published: true },
+                    include: {
+                        member: { select: { id: true, name: true, nickname: true } },
+                    },
+                },
                 name: true,
                 id: true,
                 nickname: true,
