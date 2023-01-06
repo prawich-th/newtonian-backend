@@ -20,6 +20,7 @@ const getAllMembers = (req, res, next) => __awaiter(void 0, void 0, void 0, func
                 year: true,
                 track: true,
                 status: true,
+                id: true,
                 role: true,
                 profile: true,
                 permission: true,
@@ -44,6 +45,7 @@ const getMember = (req, res, next) => __awaiter(void 0, void 0, void 0, function
             select: {
                 articles: { where: { published: true } },
                 name: true,
+                id: true,
                 nickname: true,
                 year: true,
                 track: true,

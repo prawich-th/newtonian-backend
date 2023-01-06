@@ -10,6 +10,7 @@ export const getAllMembers: RequestHandler = async (req, res, next) => {
         year: true,
         track: true,
         status: true,
+        id: true,
         role: true,
         profile: true,
         permission: true,
@@ -34,6 +35,7 @@ export const getMember: RequestHandler = async (req, res, next) => {
       select: {
         articles: { where: { published: true } },
         name: true,
+        id: true,
         nickname: true,
         year: true,
         track: true,
