@@ -156,13 +156,13 @@ const styleElement = (element, styleType) => {
     }
     else if (((_b = (_a = element.textRun) === null || _a === void 0 ? void 0 : _a.textStyle) === null || _b === void 0 ? void 0 : _b.bold) &&
         ((_d = (_c = element.textRun) === null || _c === void 0 ? void 0 : _c.textStyle) === null || _d === void 0 ? void 0 : _d.italic)) {
-        return `**_${content(element)}_**`;
+        return ` **_${content(element)}_** `;
     }
     else if ((_f = (_e = element.textRun) === null || _e === void 0 ? void 0 : _e.textStyle) === null || _f === void 0 ? void 0 : _f.italic) {
-        return `_${content(element)}_`;
+        return ` _${content(element)}_ `;
     }
     else if ((_h = (_g = element.textRun) === null || _g === void 0 ? void 0 : _g.textStyle) === null || _h === void 0 ? void 0 : _h.bold) {
-        return `**${content(element)}**`;
+        return ` **${content(element)}** `;
     }
     return content(element);
 };

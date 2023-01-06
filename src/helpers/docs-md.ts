@@ -154,11 +154,11 @@ const styleElement = (
     element.textRun?.textStyle?.bold &&
     element.textRun?.textStyle?.italic
   ) {
-    return `**_${content(element)}_**`;
+    return ` **_${content(element)}_** `;
   } else if (element.textRun?.textStyle?.italic) {
-    return `_${content(element)}_`;
+    return ` _${content(element)}_ `;
   } else if (element.textRun?.textStyle?.bold) {
-    return `**${content(element)}**`;
+    return ` **${content(element)}** `;
   }
 
   return content(element);
