@@ -19,7 +19,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getMembers = exports.publicationToggle = exports.deleteArticle = exports.getArticles = exports.importArticle = exports.fetchArticleFromGoogleDoc = exports.publishIssue = exports.newArticle = exports.newIssue = exports.uploadImage = void 0;
+exports.patchMember = exports.getMembers = exports.publicationToggle = exports.deleteArticle = exports.getArticles = exports.importArticle = exports.fetchArticleFromGoogleDoc = exports.publishIssue = exports.newArticle = exports.newIssue = exports.uploadImage = void 0;
 const fs_1 = __importDefault(require("fs"));
 const sharp_1 = __importDefault(require("sharp"));
 const docs_md_1 = require("../helpers/docs-md");
@@ -229,13 +229,6 @@ const getMembers = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
             where: {
                 status: statusFilter,
             },
-            select: {
-                id: true,
-                name: true,
-                nickname: true,
-                role: true,
-                permission: true,
-            },
         });
         return res.status(200).json({ members: members });
     }
@@ -244,3 +237,19 @@ const getMembers = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.getMembers = getMembers;
+const patchMember = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const memberId = req.params.id;
+        const result = yield db_1.prisma.members.update({
+            where: {
+                id: +memberId,
+            },
+            data: req.body,
+        });
+        res.json({ result });
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.patchMember = patchMember;

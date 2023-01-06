@@ -223,16 +223,26 @@ export const getMembers: RequestHandler = async (req, res, next) => {
       where: {
         status: statusFilter,
       },
-      select: {
-        id: true,
-        name: true,
-        nickname: true,
-        role: true,
-        permission: true,
-      },
     });
 
     return res.status(200).json({ members: members });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const patchMember: RequestHandler = async (req, res, next) => {
+  try {
+    const memberId = req.params.id;
+
+    const result = await prisma.members.update({
+      where: {
+        id: +memberId,
+      },
+      data: req.body,
+    });
+
+    res.json({ result });
   } catch (error) {
     next(error);
   }

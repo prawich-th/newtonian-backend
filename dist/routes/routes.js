@@ -24,6 +24,7 @@ router.delete("/eics/delete-article/:id", RouteProtection_1.default.verify, eics
 router.patch("/eics/toggle-publication/:id", RouteProtection_1.default.verify, eics_1.publicationToggle);
 router.get("/eics/get-members", RouteProtection_1.default.verify, eics_1.getMembers);
 router.get("/eics/get-articles", RouteProtection_1.default.verify, eics_1.getArticles);
+router.patch("/eics/patch-member/:id", RouteProtection_1.default.verify, eics_1.patchMember);
 // member
 router.get("/member", member_1.getAllMembers);
 router.get("/member/:id", member_1.getMember);

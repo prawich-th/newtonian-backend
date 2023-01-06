@@ -8,6 +8,7 @@ import {
   importArticle,
   newArticle,
   newIssue,
+  patchMember,
   publicationToggle,
   publishIssue,
   uploadImage,
@@ -51,6 +52,7 @@ router.patch(
 );
 router.get("/eics/get-members", RouteProtection.verify, getMembers);
 router.get("/eics/get-articles", RouteProtection.verify, getArticles);
+router.patch("/eics/patch-member/:id", RouteProtection.verify, patchMember);
 
 // member
 router.get("/member", getAllMembers);
