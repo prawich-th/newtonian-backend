@@ -53,6 +53,7 @@ model issues {
   main           articles?  @relation("main-article", fields: [mainArticlesId], references: [id])
   lettersId      Int?
   mainArticlesId Int?       @unique
+  pdfLink        String     @default("./")
 }
 
 model letters {
