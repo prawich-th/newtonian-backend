@@ -69,7 +69,7 @@ const newIssue = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
 exports.newIssue = newIssue;
 const newArticle = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { content, headline, issueNo, cover, writerId, category } = req.body;
+        const { content, headline, issueNo, cover, writerId, category, docId } = req.body;
         console.log(req.body);
         const created = yield db_1.prisma.articles.create({
             data: {
@@ -79,6 +79,7 @@ const newArticle = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
                 member: { connect: [{ id: +writerId }] },
                 cover: cover,
                 category: category,
+                docId: docId,
             },
         });
         res.status(201).json(created);
