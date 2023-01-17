@@ -170,6 +170,6 @@ const content = (
   const textRun = element?.textRun;
   const text = textRun?.content;
   if (textRun?.textStyle?.link?.url)
-    return `[${text}]${textRun.textStyle.link.url}`;
+    return `[${text}](${textRun.textStyle.link.url})`;
   return text?.trim() || undefined;
 };
