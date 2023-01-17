@@ -52,7 +52,8 @@ export const newIssue: RequestHandler = async (req, res, next) => {
 
 export const newArticle: RequestHandler = async (req, res, next) => {
   try {
-    const { content, headline, issueNo, cover, writerId, category } = req.body;
+    const { content, headline, issueNo, cover, writerId, category, docId } =
+      req.body;
 
     console.log(req.body);
 
@@ -64,6 +65,7 @@ export const newArticle: RequestHandler = async (req, res, next) => {
         member: { connect: [{ id: +writerId }] },
         cover: cover,
         category: category,
+        docId: docId,
       },
     });
 
