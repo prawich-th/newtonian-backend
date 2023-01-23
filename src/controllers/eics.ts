@@ -1,6 +1,5 @@
 import { RequestHandler } from "express";
 import fs from "fs";
-import { MongoAWSError } from "mongodb";
 import sharp from "sharp";
 import { fetchGoogleDocsFiles } from "../helpers/docs-md";
 import newError from "../helpers/newError";
@@ -8,15 +7,17 @@ import { prisma } from "../models/db";
 import { config } from "dotenv";
 config();
 
-import { S3 } from "aws-sdk";
-console.log(process.env.AWS_ACCESS_ID, process.env.AWS_ACCESS_SECRET);
+// - Connect to S3 Storage Bucket
 
-const s3 = new S3({
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_ID!,
-    secretAccessKey: process.env.AWS_ACCESS_SECRET!,
-  },
-});
+// import { S3 } from "aws-sdk";
+// console.log(process.env.AWS_ACCESS_ID, process.env.AWS_ACCESS_SECRET);
+
+// const s3 = new S3({
+//   credentials: {
+//     accessKeyId: process.env.AWS_ACCESS_ID!,
+//     secretAccessKey: process.env.AWS_ACCESS_SECRET!,
+//   },
+// });
 
 export const uploadImage: RequestHandler = async (req, res, next) => {
   try {

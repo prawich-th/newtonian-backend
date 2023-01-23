@@ -27,14 +27,15 @@ const newError_1 = __importDefault(require("../helpers/newError"));
 const db_1 = require("../models/db");
 const dotenv_1 = require("dotenv");
 (0, dotenv_1.config)();
-const aws_sdk_1 = require("aws-sdk");
-console.log(process.env.AWS_ACCESS_ID, process.env.AWS_ACCESS_SECRET);
-const s3 = new aws_sdk_1.S3({
-    credentials: {
-        accessKeyId: process.env.AWS_ACCESS_ID,
-        secretAccessKey: process.env.AWS_ACCESS_SECRET,
-    },
-});
+// - Connect to S3 Storage Bucket
+// import { S3 } from "aws-sdk";
+// console.log(process.env.AWS_ACCESS_ID, process.env.AWS_ACCESS_SECRET);
+// const s3 = new S3({
+//   credentials: {
+//     accessKeyId: process.env.AWS_ACCESS_ID!,
+//     secretAccessKey: process.env.AWS_ACCESS_SECRET!,
+//   },
+// });
 const uploadImage = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.file) {
