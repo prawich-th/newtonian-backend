@@ -14,6 +14,9 @@ const db_1 = require("../models/db");
 const getAllMembers = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const members = yield db_1.prisma.members.findMany({
+            where: {
+                status: { not: "ANON" },
+            },
             select: {
                 name: true,
                 nickname: true,
@@ -41,7 +44,7 @@ const getMember = (req, res, next) => __awaiter(void 0, void 0, void 0, function
     try {
         const memberId = (_a = req.params.id) !== null && _a !== void 0 ? _a : 1;
         const member = yield db_1.prisma.members.findFirst({
-            where: { id: +memberId },
+            where: { id: +memberId, status: { not: "ANON" } },
             select: {
                 articles: {
                     where: { published: true },

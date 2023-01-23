@@ -4,6 +4,9 @@ import { prisma } from "../models/db";
 export const getAllMembers: RequestHandler = async (req, res, next) => {
   try {
     const members = await prisma.members.findMany({
+      where: {
+        status: { not: "ANON" },
+      },
       select: {
         name: true,
         nickname: true,
@@ -31,7 +34,7 @@ export const getMember: RequestHandler = async (req, res, next) => {
     const memberId = req.params.id ?? 1;
 
     const member = await prisma.members.findFirst({
-      where: { id: +memberId },
+      where: { id: +memberId, status: { not: "ANON" } },
       select: {
         articles: {
           where: { published: true },
