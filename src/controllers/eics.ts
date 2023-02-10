@@ -132,7 +132,7 @@ export const importArticle: RequestHandler = async (req, res, next) => {
             headline: article.headline,
             content: content,
             issue: { connect: { id: +article.issueNo } },
-            member: { connect: { id: +article.writerId } },
+            member: { connect: [{ id: +article.writerId }] },
             cover: article.cover,
             category: article.category,
           },
