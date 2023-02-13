@@ -19,7 +19,7 @@ model members {
   year         Int            @default(11)
   track        String?
   signature    String
-  bio          String
+  bio          String         @db.Text
   permission   Int            @default(0)
   password     String?
   status       String         @default("ACTI") @db.Char(4)
