@@ -55,6 +55,7 @@ model issues {
   lettersId      Int?
   mainArticlesId Int?       @unique
   pdfLink        String     @default("./")
+  pdfViewCount   Int        @default(0)
 }
 
 model letters {

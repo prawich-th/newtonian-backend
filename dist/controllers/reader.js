@@ -8,8 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllArticle = exports.getHomePageData = exports.getIssue = exports.getAllIssues = exports.getArticle = void 0;
+exports.viewPdf = exports.getAllArticle = exports.getHomePageData = exports.getIssue = exports.getAllIssues = exports.getArticle = void 0;
+const newError_1 = __importDefault(require("../helpers/newError"));
 const db_1 = require("../models/db");
 const getArticle = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -151,3 +155,21 @@ const getAllArticle = (req, res, next) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.getAllArticle = getAllArticle;
+const viewPdf = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const issueNo = +req.params.issueNo;
+        if (!issueNo)
+            throw (0, newError_1.default)(400, "");
+        const updated = yield db_1.prisma.issues.update({
+            where: { id: issueNo },
+            data: {
+                pdfViewCount: { increment: 1 },
+            },
+        });
+        res.status(200).json(updated);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.viewPdf = viewPdf;

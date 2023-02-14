@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import newError from "../helpers/newError";
 import { prisma } from "../models/db";
 
 export const getArticle: RequestHandler = async (req, res, next) => {
@@ -143,6 +144,24 @@ export const getAllArticle: RequestHandler = async (req, res, next) => {
     });
 
     res.json(articles);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const viewPdf: RequestHandler = async (req, res, next) => {
+  try {
+    const issueNo = +req.params.issueNo;
+    if (!issueNo) throw newError(400, "");
+
+    const updated = await prisma.issues.update({
+      where: { id: issueNo },
+      data: {
+        pdfViewCount: { increment: 1 },
+      },
+    });
+
+    res.status(200).json(updated);
   } catch (error) {
     next(error);
   }

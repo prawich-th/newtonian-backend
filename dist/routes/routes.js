@@ -33,5 +33,6 @@ router.get("/reader/article/:id", reader_1.getArticle);
 router.get("/reader/article", reader_1.getAllArticle);
 router.get("/reader/issue", reader_1.getAllIssues);
 router.get("/reader/issue/:id", reader_1.getIssue);
+router.patch("/reader/viewPdf/:issueNo", reader_1.viewPdf);
 router.get("/reader/homepage", reader_1.getHomePageData);
 exports.default = router;
