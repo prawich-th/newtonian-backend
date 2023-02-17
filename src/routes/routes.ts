@@ -10,8 +10,9 @@ import {
   newIssue,
   patchMember,
   publicationToggle,
-  publishIssue,
   uploadImage,
+  getAllIssues as eicsAllIssues,
+  IssuePublicationToggle,
 } from "../controllers/eics";
 import { getAllMembers, getMember } from "../controllers/member";
 import {
@@ -33,7 +34,11 @@ router.get("/auth/getUser", RouteProtection.verify, getUser);
 // eics
 router.post("/eics/upload-img", RouteProtection.verify, uploadImage);
 router.post("/eics/new-articles", RouteProtection.verify, newArticle);
-router.patch("/eics/publish/:id", RouteProtection.verify, publishIssue);
+router.patch(
+  "/eics/toggle-issue/:id",
+  RouteProtection.verify,
+  IssuePublicationToggle
+);
 router.post("/eics/new-issue", RouteProtection.verify, newIssue);
 router.get(
   "/eics/fetch-article/:id",
@@ -54,6 +59,7 @@ router.patch(
 router.get("/eics/get-members", RouteProtection.verify, getMembers);
 router.get("/eics/get-articles", RouteProtection.verify, getArticles);
 router.patch("/eics/patch-member/:id", RouteProtection.verify, patchMember);
+router.get("/eics/get-all-issues", RouteProtection.verify, eicsAllIssues);
 
 // member
 router.get("/member", getAllMembers);

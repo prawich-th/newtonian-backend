@@ -16,7 +16,7 @@ router.get("/auth/getUser", RouteProtection_1.default.verify, auth_1.getUser);
 // eics
 router.post("/eics/upload-img", RouteProtection_1.default.verify, eics_1.uploadImage);
 router.post("/eics/new-articles", RouteProtection_1.default.verify, eics_1.newArticle);
-router.patch("/eics/publish/:id", RouteProtection_1.default.verify, eics_1.publishIssue);
+router.patch("/eics/toggle-issue/:id", RouteProtection_1.default.verify, eics_1.IssuePublicationToggle);
 router.post("/eics/new-issue", RouteProtection_1.default.verify, eics_1.newIssue);
 router.get("/eics/fetch-article/:id", RouteProtection_1.default.verify, eics_1.fetchArticleFromGoogleDoc);
 router.post("/eics/import-article", RouteProtection_1.default.verify, eics_1.importArticle);
@@ -25,6 +25,7 @@ router.patch("/eics/toggle-publication/:id", RouteProtection_1.default.verify, e
 router.get("/eics/get-members", RouteProtection_1.default.verify, eics_1.getMembers);
 router.get("/eics/get-articles", RouteProtection_1.default.verify, eics_1.getArticles);
 router.patch("/eics/patch-member/:id", RouteProtection_1.default.verify, eics_1.patchMember);
+router.get("/eics/get-all-issues", RouteProtection_1.default.verify, eics_1.getAllIssues);
 // member
 router.get("/member", member_1.getAllMembers);
 router.get("/member/:id", member_1.getMember);

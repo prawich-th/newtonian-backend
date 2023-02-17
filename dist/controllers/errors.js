@@ -9,6 +9,7 @@ const notFound404 = (req, res, next) => {
     res.status(404).json({
         message: "Alternate APIs can't find service you have requested.",
         requestedService: req.path,
+        method: req.method,
     });
 };
 exports.notFound404 = notFound404;

@@ -76,15 +76,42 @@ export const newArticle: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const publishIssue: RequestHandler = async (req, res, next) => {
+export const IssuePublicationToggle: RequestHandler = async (
+  req,
+  res,
+  next
+) => {
   try {
-    await prisma.articles.updateMany({
-      where: { issuesId: +req.params.id },
-      data: {
+    const issueId = +req.params.id;
+    if (!issueId) throw newError(400, "Issue Id not provided");
+    const dbIssue = await prisma.issues.findFirst({
+      where: {
+        id: issueId,
+      },
+      select: {
+        id: true,
         published: true,
-        publishingDate: new Date(),
       },
     });
+    if (!dbIssue) throw newError(404, "Issue Id provided not found in db");
+    const now = new Date();
+    await prisma.issues.update({
+      where: {
+        id: issueId,
+      },
+      data: {
+        published: !dbIssue.published,
+        publishingDate: now,
+      },
+    });
+    await prisma.articles.updateMany({
+      where: { issuesId: issueId },
+      data: {
+        published: !dbIssue.published,
+        publishingDate: now,
+      },
+    });
+
     res.json("success");
   } catch (error) {
     next(error);
@@ -246,6 +273,39 @@ export const patchMember: RequestHandler = async (req, res, next) => {
     });
 
     res.json({ result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getAllIssues: RequestHandler = async (req, res, next) => {
+  try {
+    const page = req.query.page ?? 0;
+    const perPage = req.query.perPage ?? 10;
+
+    const issues = await prisma.issues.findMany({
+      skip: +perPage * +page,
+      take: +perPage,
+      include: {
+        articles: {
+          select: {
+            id: true,
+            headline: true,
+            member: {
+              select: {
+                id: true,
+                name: true,
+                nickname: true,
+              },
+            },
+            views: true,
+            cover: true,
+          },
+        },
+      },
+    });
+
+    res.json(issues);
   } catch (error) {
     next(error);
   }

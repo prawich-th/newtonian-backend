@@ -19,7 +19,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.patchMember = exports.getMembers = exports.publicationToggle = exports.deleteArticle = exports.getArticles = exports.importArticle = exports.fetchArticleFromGoogleDoc = exports.publishIssue = exports.newArticle = exports.newIssue = exports.uploadImage = void 0;
+exports.getAllIssues = exports.patchMember = exports.getMembers = exports.publicationToggle = exports.deleteArticle = exports.getArticles = exports.importArticle = exports.fetchArticleFromGoogleDoc = exports.IssuePublicationToggle = exports.newArticle = exports.newIssue = exports.uploadImage = void 0;
 const fs_1 = __importDefault(require("fs"));
 const sharp_1 = __importDefault(require("sharp"));
 const docs_md_1 = require("../helpers/docs-md");
@@ -90,13 +90,37 @@ const newArticle = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.newArticle = newArticle;
-const publishIssue = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const IssuePublicationToggle = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield db_1.prisma.articles.updateMany({
-            where: { issuesId: +req.params.id },
-            data: {
+        const issueId = +req.params.id;
+        if (!issueId)
+            throw (0, newError_1.default)(400, "Issue Id not provided");
+        const dbIssue = yield db_1.prisma.issues.findFirst({
+            where: {
+                id: issueId,
+            },
+            select: {
+                id: true,
                 published: true,
-                publishingDate: new Date(),
+            },
+        });
+        if (!dbIssue)
+            throw (0, newError_1.default)(404, "Issue Id provided not found in db");
+        const now = new Date();
+        yield db_1.prisma.issues.update({
+            where: {
+                id: issueId,
+            },
+            data: {
+                published: !dbIssue.published,
+                publishingDate: now,
+            },
+        });
+        yield db_1.prisma.articles.updateMany({
+            where: { issuesId: issueId },
+            data: {
+                published: !dbIssue.published,
+                publishingDate: now,
             },
         });
         res.json("success");
@@ -105,7 +129,7 @@ const publishIssue = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         next(error);
     }
 });
-exports.publishIssue = publishIssue;
+exports.IssuePublicationToggle = IssuePublicationToggle;
 const fetchArticleFromGoogleDoc = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.params.id;
@@ -255,3 +279,36 @@ const patchMember = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.patchMember = patchMember;
+const getAllIssues = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c, _d;
+    try {
+        const page = (_c = req.query.page) !== null && _c !== void 0 ? _c : 0;
+        const perPage = (_d = req.query.perPage) !== null && _d !== void 0 ? _d : 10;
+        const issues = yield db_1.prisma.issues.findMany({
+            skip: +perPage * +page,
+            take: +perPage,
+            include: {
+                articles: {
+                    select: {
+                        id: true,
+                        headline: true,
+                        member: {
+                            select: {
+                                id: true,
+                                name: true,
+                                nickname: true,
+                            },
+                        },
+                        views: true,
+                        cover: true,
+                    },
+                },
+            },
+        });
+        res.json(issues);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.getAllIssues = getAllIssues;
