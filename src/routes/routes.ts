@@ -13,6 +13,7 @@ import {
   uploadImage,
   getAllIssues as eicsAllIssues,
   IssuePublicationToggle,
+  newMember,
 } from "../controllers/eics";
 import { getAllMembers, getMember } from "../controllers/member";
 import {
@@ -60,6 +61,7 @@ router.get("/eics/get-members", RouteProtection.verify, getMembers);
 router.get("/eics/get-articles", RouteProtection.verify, getArticles);
 router.patch("/eics/patch-member/:id", RouteProtection.verify, patchMember);
 router.get("/eics/get-all-issues", RouteProtection.verify, eicsAllIssues);
+router.post("/eics/new-member", RouteProtection.verify, newMember);
 
 // member
 router.get("/member", getAllMembers);

@@ -310,3 +310,34 @@ export const getAllIssues: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+export const newMember: RequestHandler = async (req, res, next) => {
+  try {
+    const name: string = req.body.name;
+    const nickname: string = req.body.nickname;
+    const year: number = +req.body.year;
+    const track: string = req.body.track;
+    const role: string = req.body.role;
+    const bio: string = req.body.bio;
+
+    if (!name || !nickname || !year || !track || !role || !bio)
+      throw newError(400, "Bad Request");
+
+    const newMember = await prisma.members.create({
+      data: {
+        name,
+        nickname,
+        year,
+        track,
+        role,
+        profile: `/members/${name.split(" ").join("")}/image.webp`,
+        signature: `/members/${name.split(" ").join("")}/signature.webp`,
+        bio,
+      },
+    });
+
+    return res.status(201).json(newMember);
+  } catch (error) {
+    next(error);
+  }
+};
