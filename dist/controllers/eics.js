@@ -19,7 +19,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllIssues = exports.patchMember = exports.getMembers = exports.publicationToggle = exports.deleteArticle = exports.getArticles = exports.importArticle = exports.fetchArticleFromGoogleDoc = exports.IssuePublicationToggle = exports.newArticle = exports.newIssue = exports.uploadImage = void 0;
+exports.newMember = exports.getAllIssues = exports.patchMember = exports.getMembers = exports.publicationToggle = exports.deleteArticle = exports.getArticles = exports.importArticle = exports.fetchArticleFromGoogleDoc = exports.IssuePublicationToggle = exports.newArticle = exports.newIssue = exports.uploadImage = void 0;
 const fs_1 = __importDefault(require("fs"));
 const sharp_1 = __importDefault(require("sharp"));
 const docs_md_1 = require("../helpers/docs-md");
@@ -312,3 +312,32 @@ const getAllIssues = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.getAllIssues = getAllIssues;
+const newMember = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const name = req.body.name;
+        const nickname = req.body.nickname;
+        const year = +req.body.year;
+        const track = req.body.track;
+        const role = req.body.role;
+        const bio = req.body.bio;
+        if (!name || !nickname || !year || !track || !role || !bio)
+            throw (0, newError_1.default)(400, "Bad Request");
+        const newMember = yield db_1.prisma.members.create({
+            data: {
+                name,
+                nickname,
+                year,
+                track,
+                role,
+                profile: `/members/${name.split(" ").join("")}/image.webp`,
+                signature: `/members/${name.split(" ").join("")}/signature.webp`,
+                bio,
+            },
+        });
+        return res.status(201).json(newMember);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.newMember = newMember;
