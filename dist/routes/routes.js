@@ -37,4 +37,5 @@ router.get("/reader/issue", reader_1.getAllIssues);
 router.get("/reader/issue/:id", reader_1.getIssue);
 router.patch("/reader/viewPdf/:issueNo", reader_1.viewPdf);
 router.get("/reader/homepage", reader_1.getHomePageData);
+router.get("/reader/latest-issue", reader_1.redirectLatestIssue);
 exports.default = router;

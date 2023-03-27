@@ -166,3 +166,17 @@ export const viewPdf: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+export const redirectLatestIssue: RequestHandler = async (req, res, next) => {
+  try {
+    const issue = await prisma.issues.findFirst({
+      select: { id: true },
+      orderBy: { id: "desc" },
+    });
+    console.log(issue);
+
+    res.redirect(`https://news.newton.ac.th/issues/${issue?.id ?? 1}`);
+  } catch (error) {
+    next(error);
+  }
+};
