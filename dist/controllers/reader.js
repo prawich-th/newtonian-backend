@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.viewPdf = exports.getAllArticle = exports.getHomePageData = exports.getIssue = exports.getAllIssues = exports.getArticle = void 0;
+exports.redirectLatestIssue = exports.viewPdf = exports.getAllArticle = exports.getHomePageData = exports.getIssue = exports.getAllIssues = exports.getArticle = void 0;
 const newError_1 = __importDefault(require("../helpers/newError"));
 const db_1 = require("../models/db");
 const getArticle = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -173,3 +173,18 @@ const viewPdf = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.viewPdf = viewPdf;
+const redirectLatestIssue = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b;
+    try {
+        const issue = yield db_1.prisma.issues.findFirst({
+            select: { id: true },
+            orderBy: { id: "desc" },
+        });
+        console.log(issue);
+        res.redirect(`https://news.newton.ac.th/issues/${(_b = issue === null || issue === void 0 ? void 0 : issue.id) !== null && _b !== void 0 ? _b : 1}`);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.redirectLatestIssue = redirectLatestIssue;

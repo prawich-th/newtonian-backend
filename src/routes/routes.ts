@@ -22,6 +22,7 @@ import {
   getArticle,
   getHomePageData,
   getIssue,
+  redirectLatestIssue,
   viewPdf,
 } from "../controllers/reader";
 import RouteProtection from "../helpers/RouteProtection";
@@ -74,5 +75,6 @@ router.get("/reader/issue", getAllIssues);
 router.get("/reader/issue/:id", getIssue);
 router.patch("/reader/viewPdf/:issueNo", viewPdf);
 router.get("/reader/homepage", getHomePageData);
+router.get("/reader/latest-issue", redirectLatestIssue);
 
 export default router;
