@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getUser, signin } from "../controllers/auth";
+import { ChangePassword, getUser, signin } from "../controllers/auth";
 import {
   deleteArticle,
   fetchArticleFromGoogleDoc,
@@ -32,6 +32,11 @@ const router = Router();
 // auth
 router.post("/auth/signin", signin);
 router.get("/auth/getUser", RouteProtection.verify, getUser);
+router.patch(
+  "/auth/change-password/:id",
+  RouteProtection.verify,
+  ChangePassword
+);
 
 // eics
 router.post("/eics/upload-img", RouteProtection.verify, uploadImage);

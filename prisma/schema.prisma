@@ -21,7 +21,7 @@ model members {
   signature    String
   bio          String         @db.Text
   permission   Int            @default(0)
-  password     String?
+  password     String         @default("$2b$12$yCsRqjOOztwejZWgFzZiU.HdCsIl0gr7xOOIaU.Py65iijXJeptu6")
   status       String         @default("ACTI") @db.Char(4)
   memberSince  DateTime       @default(now())
   articles     articles[]

@@ -204,6 +204,9 @@ export const getArticles: RequestHandler = async (req, res, next) => {
 
 export const deleteArticle: RequestHandler = async (req, res, next) => {
   try {
+    if (req.user.permission < 3)
+      throw newError(403, "Forbidden, Insufficient Permission");
+
     const articleId = +req.params.id;
     const result = await prisma.articles.delete({
       where: { id: articleId },
@@ -261,9 +264,50 @@ export const getMembers: RequestHandler = async (req, res, next) => {
   }
 };
 
+const PATCHMEMBER_PERMISSION_LVL3UP_KEYS = ["permission"];
+const PATCHMEMBER_PERMISSION_LVL4UP_KEYS = ["password", "memberSince", "id"];
 export const patchMember: RequestHandler = async (req, res, next) => {
   try {
     const memberId = req.params.id;
+
+    console.log(req.user.name, req.user.permission);
+    if (req.user.permission < 2)
+      throw newError(
+        403,
+        "Forbidden, Insufficient permission to access this api"
+      );
+
+    const editedProperties = Object.keys(req.body);
+
+    if (
+      PATCHMEMBER_PERMISSION_LVL3UP_KEYS.some((cur) =>
+        editedProperties.includes(cur)
+      ) &&
+      req.user.permission < 3
+    )
+      throw newError(
+        403,
+        "Forbidden, Insufficient permission to edited some field"
+      );
+
+    if (
+      PATCHMEMBER_PERMISSION_LVL4UP_KEYS.some((cur) =>
+        editedProperties.includes(cur)
+      ) &&
+      req.user.permission < 4
+    )
+      throw newError(
+        403,
+        "Forbidden, Insufficient permission to edited some field"
+      );
+
+    if (
+      editedProperties.includes("status") &&
+      !["CONS", "ACTI", "ANON", "LEAV", "GRAD"].some(
+        (cur) => req.body.status === cur
+      )
+    )
+      throw newError(400, "Status code not existed");
 
     const result = await prisma.members.update({
       where: {

@@ -13,6 +13,7 @@ const router = (0, express_1.Router)();
 // auth
 router.post("/auth/signin", auth_1.signin);
 router.get("/auth/getUser", RouteProtection_1.default.verify, auth_1.getUser);
+router.patch("/auth/change-password/:id", RouteProtection_1.default.verify, auth_1.ChangePassword);
 // eics
 router.post("/eics/upload-img", RouteProtection_1.default.verify, eics_1.uploadImage);
 router.post("/eics/new-articles", RouteProtection_1.default.verify, eics_1.newArticle);
