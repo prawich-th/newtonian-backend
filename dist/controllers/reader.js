@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.redirectLatestIssue = exports.viewPdf = exports.getAllArticle = exports.getHomePageData = exports.getIssue = exports.getAllIssues = exports.getArticle = void 0;
+exports.redirectMusical = exports.redirectLatestIssue = exports.viewPdf = exports.getAllArticle = exports.getHomePageData = exports.getIssue = exports.getAllIssues = exports.getArticle = void 0;
 const newError_1 = __importDefault(require("../helpers/newError"));
 const db_1 = require("../models/db");
 const getArticle = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -188,3 +188,13 @@ const redirectLatestIssue = (req, res, next) => __awaiter(void 0, void 0, void 0
     }
 });
 exports.redirectLatestIssue = redirectLatestIssue;
+// just to redirect the musical's ticket buyer to the right website. (temp)
+const redirectMusical = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        return res.redirect(`https://docs.google.com/forms/d/e/1FAIpQLSeeLULSkxdImVM3zG4lsU797OTlzDGP2QRga6X3fJCdLwPPGg/viewform`);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.redirectMusical = redirectMusical;

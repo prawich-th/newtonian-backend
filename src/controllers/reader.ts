@@ -180,3 +180,14 @@ export const redirectLatestIssue: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+// just to redirect the musical's ticket buyer to the right website. (temp)
+export const redirectMusical: RequestHandler = async (req, res, next) => {
+  try {
+    return res.redirect(
+      `https://docs.google.com/forms/d/e/1FAIpQLSeeLULSkxdImVM3zG4lsU797OTlzDGP2QRga6X3fJCdLwPPGg/viewform`
+    );
+  } catch (error) {
+    next(error);
+  }
+};
