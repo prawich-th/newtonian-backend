@@ -23,6 +23,7 @@ import {
   getHomePageData,
   getIssue,
   redirectLatestIssue,
+  redirectMusical,
   viewPdf,
 } from "../controllers/reader";
 import RouteProtection from "../helpers/RouteProtection";
@@ -81,5 +82,7 @@ router.get("/reader/issue/:id", getIssue);
 router.patch("/reader/viewPdf/:issueNo", viewPdf);
 router.get("/reader/homepage", getHomePageData);
 router.get("/reader/latest-issue", redirectLatestIssue);
+
+router.get("/reader/musical-seat", redirectMusical);
 
 export default router;
