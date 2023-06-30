@@ -191,7 +191,7 @@ exports.redirectLatestIssue = redirectLatestIssue;
 // just to redirect the musical's ticket buyer to the right website. (temp)
 const redirectMusical = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        return res.redirect(`https://docs.google.com/forms/d/e/1FAIpQLSeeLULSkxdImVM3zG4lsU797OTlzDGP2QRga6X3fJCdLwPPGg/viewform`);
+        return res.redirect(`https://ticket.newton.ac.th`);
     }
     catch (error) {
         next(error);
