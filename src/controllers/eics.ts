@@ -21,6 +21,7 @@ config();
 
 export const uploadImage: RequestHandler = async (req, res, next) => {
   try {
+    console.log(req.body, req.file);
     if (!req.file) {
       res.status(400).json({ message: "provide an image" });
     } else {
@@ -162,6 +163,7 @@ export const importArticle: RequestHandler = async (req, res, next) => {
             member: { connect: [{ id: +article.writerId }] },
             cover: article.cover,
             category: article.category,
+            docId: article.docId,
           },
         });
 

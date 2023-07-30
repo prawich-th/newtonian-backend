@@ -54,7 +54,7 @@ exports.getAllIssues = getAllIssues;
 const getIssue = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const issueId = req.params.id;
-        const issue = yield db_1.prisma.issues.findFirst({
+        const issue = yield db_1.prisma.issues.findFirstOrThrow({
             where: { id: +issueId, published: true },
             include: {
                 articles: {

@@ -38,6 +38,7 @@ const dotenv_1 = require("dotenv");
 // });
 const uploadImage = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log(req.body, req.file);
         if (!req.file) {
             res.status(400).json({ message: "provide an image" });
         }
@@ -161,6 +162,7 @@ const importArticle = (req, res, next) => __awaiter(void 0, void 0, void 0, func
                             member: { connect: [{ id: +article.writerId }] },
                             cover: article.cover,
                             category: article.category,
+                            docId: article.docId,
                         },
                     });
                     result.push(`Successfully imported the article  (${row.headline}) - id (${row.id})`);

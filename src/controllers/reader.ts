@@ -45,7 +45,7 @@ export const getIssue: RequestHandler = async (req, res, next) => {
   try {
     const issueId = req.params.id;
 
-    const issue = await prisma.issues.findFirst({
+    const issue = await prisma.issues.findFirstOrThrow({
       where: { id: +issueId, published: true },
       include: {
         articles: {
