@@ -16,7 +16,7 @@ router.get("/auth/getUser", RouteProtection_1.default.verify, auth_1.getUser);
 router.patch("/auth/change-password/:id", RouteProtection_1.default.verify, auth_1.ChangePassword);
 // eics
 router.post("/eics/upload-img", RouteProtection_1.default.verify, eics_1.uploadImage);
-router.post("/eics/new-articles", RouteProtection_1.default.verify, eics_1.newArticle);
+router.post("/eics/new-article", RouteProtection_1.default.verify, eics_1.newArticle);
 router.patch("/eics/toggle-issue/:id", RouteProtection_1.default.verify, eics_1.IssuePublicationToggle);
 router.post("/eics/new-issue", RouteProtection_1.default.verify, eics_1.newIssue);
 router.get("/eics/fetch-article/:id", RouteProtection_1.default.verify, eics_1.fetchArticleFromGoogleDoc);

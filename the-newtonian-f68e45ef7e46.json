@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "the-newtonian",
+  "private_key_id": "f68e45ef7e464054ae894a344cfb6022cc75352b",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDr81ZSBFu2nD7Z\nO9ltArYe8htJHGwNT2440gSxGT9t3wZGHmF32fV1iDOTeqL1AoxBjxr21nWTDBIV\nUAxDeiqNJ64A1RUczKpSQ0wToUuFh72dqHs2V+pxobdwd8GEyCXGGJe2Jpv7kL+L\ncw4bX9Zg1+2jBR+v94q4PHJRZ8TCI9siKwPXmpVYRBv0x86W52Bp1o7X7Je2kz8q\nAcrweEU+y1qbaDWMkFk17hJ6OETWgu3zU1UU4mzGSb1Uu3emGdoj6ym7eMzVoUFV\noiykFfGFfHtn5eZjNKn2RlJkkjj/ysU8bSvP1xtcZ5uzTmgneeGGkmJ1/6Sk5e/W\nAKs5OxojAgMBAAECggEAZQv8qzo/lrhaOAkoB8XR/fW8Vrar1ZVvRDk5FikUX3bU\nRoIrRrsaoj92qxGpqRjyvP7O0ugsSRGxytvRrLIsd/AG1kdq9770sC8u7Pc2ExT7\nUQH+5lqHRiu2Fh3LTBS1DJ2qlzD4uycVyOA4qeOEuUuv8xE2LVNrXpRQdulkO6lx\nupOsqFOfjaLEdtetLsdJXE4Ey7Jf4mgIwrtJLvYgo9aodk27ifn7vJqSQfWkjM4x\nya2En87XVP7Ek8vtJ/VHomnxqeIFbjWTTWHIQCKNnp4DRFRozQWnrIn8GABJFeim\nhRIElSzOC4PWImd4xhfWu3NVSjc6K1Ie2bEGhULKbQKBgQD/rJH7nOqde08AIWT6\n0znNeHDJJsQ0jwEFGELcTcuePoDMQeOv2zm+Bx5uvWJO/5Nn1jHxKiNnNLF2waCL\njnVZB90EHCpCUgCzJcKZw5/2qv4G9uEi8zF6utZLjr8TmZo80Ko4ugF17jsk8xQ4\nKb20V5ePE/gBN/f18omGWhzstQKBgQDsQFS1K/C+VC17N/8ABCkcNPyYRo+2Ivq7\nPJebXtCAlT3/fBlRVc1nOk0Nf2Mf19mff84m7yuXDaM5moxLZ8OFJgT6vZZlHXvB\nf6kDnGekxB9+wkzvBhfNGZw2jrZmXPTvh4tZlBF/WweFjD6gu6tSdrjRaGHxndNf\nYuc/AqIKdwKBgAiTKxo7OwspFY81j4NyDiA8B9xXNoFkwm3/UE6/NTMLeZpgI1jE\ni306E+U26NMpczIqVuZ1uVY+yCzpdY74qirgPqNipnAu++MGQy6RBw5o0bg+E3Lu\noRwyo/lIwlPP9QJRJURdyKrB4K3ukSEJFVm1Dlo4Gzs/O0u+ZKpi31F5AoGAKbY1\n/oLSj5gnK5E4aZVSeNN2IaCbsQm+AR7ymZEE+R7ggmIzyiN/D5HAlvh91Np0Zu/W\nwxMJPDNBNWNvD8UzRSfwSyD8E8A/4GscuTF9Lx8dfHDrymvl+eViqlNKKwqQiFYD\nKX62FClLS632RMS9u+KQQRDP8ivubPH2aC6b04MCgYEAgNeDS5M1rka6uqgRPGt2\nJGPpP+AeNto0JKOecKnTBMDy/MxDk9A6PqWN5DurVy9EDmpbUkNpz/qHNkUtbrCl\npgXCnquUOZKabIuYWUyo8nGv1klxQ2QaKlFxrDz9dBoum/ujXIfB6/7quel08c80\nV9EPRjvY2h+Cp/Jzut14TYs=\n-----END PRIVATE KEY-----\n",
+  "client_email": "the-newtonian-tech@the-newtonian.iam.gserviceaccount.com",
+  "client_id": "115079472142514953048",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/the-newtonian-tech%40the-newtonian.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

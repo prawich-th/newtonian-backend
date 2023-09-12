@@ -4,36 +4,20 @@ config();
 
 console.info("Connecting to Google APIs");
 
-let acct_exp: number | any = 0;
-const oauth2Client = new google.auth.OAuth2(
-  process.env.GOOGLE_DOCS_CLIENT_ID,
-  process.env.GOOGLE_DOCS_CLIENT_SECRET,
-  "https://developers.google.com/oauthplayground"
-);
-oauth2Client.setCredentials({
-  access_token: process.env.GOOGLE_DOCS_ACCESS,
-  refresh_token: process.env.GOOGLE_DOCS_REFRESH,
+const auth = new google.auth.GoogleAuth({
+  keyFile: "./the-newtonian-f68e45ef7e46.json",
+  scopes: ["https://www.googleapis.com/auth/documents"],
 });
-oauth2Client.refreshAccessToken((e, d) => {
-  if (e) throw new Error("Something went wrong refreshing token");
-  acct_exp = d!.expiry_date;
-});
+
 const docs = google.docs("v1");
 console.info("Successfully Connected to google docs");
 
 export const fetchGoogleDocsFiles = async (documentId: string) => {
   console.log("\nDownloading document", documentId);
   try {
-    if (Date.now() >= acct_exp) {
-      oauth2Client.refreshAccessToken((e, d) => {
-        if (e) throw new Error("Something went wrong refreshing token");
-        acct_exp = d!.expiry_date;
-      });
-    }
-
     const result = await docs.documents.get({
       documentId: documentId.split(":")[0],
-      auth: oauth2Client,
+      auth: auth,
     });
     const title = documentId.includes(":")
       ? documentId.split(":")[1]
@@ -169,7 +153,8 @@ const content = (
 ): string | undefined => {
   const textRun = element?.textRun;
   const text = textRun?.content;
+
   if (textRun?.textStyle?.link?.url)
-    return `[${text}](${textRun.textStyle.link.url})`;
+    return ` [${text}](${textRun.textStyle.link.url}) `;
   return text?.trim() || undefined;
 };

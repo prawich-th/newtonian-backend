@@ -14,32 +14,18 @@ const googleapis_1 = require("googleapis");
 const dotenv_1 = require("dotenv");
 (0, dotenv_1.config)();
 console.info("Connecting to Google APIs");
-let acct_exp = 0;
-const oauth2Client = new googleapis_1.google.auth.OAuth2(process.env.GOOGLE_DOCS_CLIENT_ID, process.env.GOOGLE_DOCS_CLIENT_SECRET, "https://developers.google.com/oauthplayground");
-oauth2Client.setCredentials({
-    access_token: process.env.GOOGLE_DOCS_ACCESS,
-    refresh_token: process.env.GOOGLE_DOCS_REFRESH,
-});
-oauth2Client.refreshAccessToken((e, d) => {
-    if (e)
-        throw new Error("Something went wrong refreshing token");
-    acct_exp = d.expiry_date;
+const auth = new googleapis_1.google.auth.GoogleAuth({
+    keyFile: "./the-newtonian-f68e45ef7e46.json",
+    scopes: ["https://www.googleapis.com/auth/documents"],
 });
 const docs = googleapis_1.google.docs("v1");
 console.info("Successfully Connected to google docs");
 const fetchGoogleDocsFiles = (documentId) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("\nDownloading document", documentId);
     try {
-        if (Date.now() >= acct_exp) {
-            oauth2Client.refreshAccessToken((e, d) => {
-                if (e)
-                    throw new Error("Something went wrong refreshing token");
-                acct_exp = d.expiry_date;
-            });
-        }
         const result = yield docs.documents.get({
             documentId: documentId.split(":")[0],
-            auth: oauth2Client,
+            auth: auth,
         });
         const title = documentId.includes(":")
             ? documentId.split(":")[1]
@@ -171,6 +157,6 @@ const content = (element) => {
     const textRun = element === null || element === void 0 ? void 0 : element.textRun;
     const text = textRun === null || textRun === void 0 ? void 0 : textRun.content;
     if ((_b = (_a = textRun === null || textRun === void 0 ? void 0 : textRun.textStyle) === null || _a === void 0 ? void 0 : _a.link) === null || _b === void 0 ? void 0 : _b.url)
-        return `[${text}](${textRun.textStyle.link.url})`;
+        return ` [${text}](${textRun.textStyle.link.url}) `;
     return (text === null || text === void 0 ? void 0 : text.trim()) || undefined;
 };

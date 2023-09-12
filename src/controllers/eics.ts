@@ -7,18 +7,6 @@ import { prisma } from "../models/db";
 import { config } from "dotenv";
 config();
 
-// - Connect to S3 Storage Bucket
-
-// import { S3 } from "aws-sdk";
-// console.log(process.env.AWS_ACCESS_ID, process.env.AWS_ACCESS_SECRET);
-
-// const s3 = new S3({
-//   credentials: {
-//     accessKeyId: process.env.AWS_ACCESS_ID!,
-//     secretAccessKey: process.env.AWS_ACCESS_SECRET!,
-//   },
-// });
-
 export const uploadImage: RequestHandler = async (req, res, next) => {
   try {
     console.log(req.body, req.file);
@@ -146,38 +134,14 @@ interface article {
 
 export const importArticle: RequestHandler = async (req, res, next) => {
   try {
-    const articles: article[] = req.body.articles;
+    const article: article = req.body.article;
 
-    const result: string[] = [];
+    console.log(article);
 
-    for await (const article of articles) {
-      try {
-        const content = await fetchGoogleDocsFiles(article.docId);
-        if (!content) throw newError(500, "Something went wrong");
+    const content = await fetchGoogleDocsFiles(article.docId);
+    if (!content) throw newError(500, "Something went wrong");
 
-        const row = await prisma.articles.create({
-          data: {
-            headline: article.headline,
-            content: content,
-            issue: { connect: { id: +article.issueNo } },
-            member: { connect: [{ id: +article.writerId }] },
-            cover: article.cover,
-            category: article.category,
-            docId: article.docId,
-          },
-        });
-
-        result.push(
-          `Successfully imported the article  (${row.headline}) - id (${row.id})`
-        );
-      } catch (error) {
-        result.push(
-          `Failed to import the article (${article.headline}) - document id (${article.docId})`
-        );
-      }
-    }
-
-    res.status(201).json(result);
+    res.status(201).json(content);
   } catch (error) {
     console.log(error);
     next(error);

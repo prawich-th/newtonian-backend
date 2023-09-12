@@ -8,13 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __asyncValues = (this && this.__asyncValues) || function (o) {
-    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-    var m = o[Symbol.asyncIterator], i;
-    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
-    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
-    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -27,15 +20,6 @@ const newError_1 = __importDefault(require("../helpers/newError"));
 const db_1 = require("../models/db");
 const dotenv_1 = require("dotenv");
 (0, dotenv_1.config)();
-// - Connect to S3 Storage Bucket
-// import { S3 } from "aws-sdk";
-// console.log(process.env.AWS_ACCESS_ID, process.env.AWS_ACCESS_SECRET);
-// const s3 = new S3({
-//   credentials: {
-//     accessKeyId: process.env.AWS_ACCESS_ID!,
-//     secretAccessKey: process.env.AWS_ACCESS_SECRET!,
-//   },
-// });
 const uploadImage = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         console.log(req.body, req.file);
@@ -143,43 +127,13 @@ const fetchArticleFromGoogleDoc = (req, res, next) => __awaiter(void 0, void 0, 
 });
 exports.fetchArticleFromGoogleDoc = fetchArticleFromGoogleDoc;
 const importArticle = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var e_1, _a;
     try {
-        const articles = req.body.articles;
-        const result = [];
-        try {
-            for (var articles_1 = __asyncValues(articles), articles_1_1; articles_1_1 = yield articles_1.next(), !articles_1_1.done;) {
-                const article = articles_1_1.value;
-                try {
-                    const content = yield (0, docs_md_1.fetchGoogleDocsFiles)(article.docId);
-                    if (!content)
-                        throw (0, newError_1.default)(500, "Something went wrong");
-                    const row = yield db_1.prisma.articles.create({
-                        data: {
-                            headline: article.headline,
-                            content: content,
-                            issue: { connect: { id: +article.issueNo } },
-                            member: { connect: [{ id: +article.writerId }] },
-                            cover: article.cover,
-                            category: article.category,
-                            docId: article.docId,
-                        },
-                    });
-                    result.push(`Successfully imported the article  (${row.headline}) - id (${row.id})`);
-                }
-                catch (error) {
-                    result.push(`Failed to import the article (${article.headline}) - document id (${article.docId})`);
-                }
-            }
-        }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (articles_1_1 && !articles_1_1.done && (_a = articles_1.return)) yield _a.call(articles_1);
-            }
-            finally { if (e_1) throw e_1.error; }
-        }
-        res.status(201).json(result);
+        const article = req.body.article;
+        console.log(article);
+        const content = yield (0, docs_md_1.fetchGoogleDocsFiles)(article.docId);
+        if (!content)
+            throw (0, newError_1.default)(500, "Something went wrong");
+        res.status(201).json(content);
     }
     catch (error) {
         console.log(error);
@@ -252,9 +206,9 @@ const publicationToggle = (req, res, next) => __awaiter(void 0, void 0, void 0, 
 });
 exports.publicationToggle = publicationToggle;
 const getMembers = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _b;
+    var _a;
     try {
-        const statusFilter = (_b = req.query.sfilter) !== null && _b !== void 0 ? _b : undefined;
+        const statusFilter = (_a = req.query.sfilter) !== null && _a !== void 0 ? _a : undefined;
         const members = yield db_1.prisma.members.findMany({
             where: {
                 status: statusFilter,
@@ -299,10 +253,10 @@ const patchMember = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
 });
 exports.patchMember = patchMember;
 const getAllIssues = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _c, _d;
+    var _b, _c;
     try {
-        const page = (_c = req.query.page) !== null && _c !== void 0 ? _c : 0;
-        const perPage = (_d = req.query.perPage) !== null && _d !== void 0 ? _d : 10;
+        const page = (_b = req.query.page) !== null && _b !== void 0 ? _b : 0;
+        const perPage = (_c = req.query.perPage) !== null && _c !== void 0 ? _c : 10;
         const issues = yield db_1.prisma.issues.findMany({
             skip: +perPage * +page,
             take: +perPage,

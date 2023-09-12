@@ -41,7 +41,7 @@ router.patch(
 
 // eics
 router.post("/eics/upload-img", RouteProtection.verify, uploadImage);
-router.post("/eics/new-articles", RouteProtection.verify, newArticle);
+router.post("/eics/new-article", RouteProtection.verify, newArticle);
 router.patch(
   "/eics/toggle-issue/:id",
   RouteProtection.verify,
