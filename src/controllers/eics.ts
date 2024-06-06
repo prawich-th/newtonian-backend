@@ -170,6 +170,7 @@ export const getArticles: RequestHandler = async (req, res, next) => {
 
 export const deleteArticle: RequestHandler = async (req, res, next) => {
   try {
+    if (!req.user) throw newError(401, "Unauthorized");
     if (req.user.permission < 3)
       throw newError(403, "Forbidden, Insufficient Permission");
 
@@ -235,7 +236,7 @@ const PATCHMEMBER_PERMISSION_LVL4UP_KEYS = ["password", "memberSince", "id"];
 export const patchMember: RequestHandler = async (req, res, next) => {
   try {
     const memberId = req.params.id;
-
+    if (!req.user) throw newError(401, "Unauthorized");
     console.log(req.user.name, req.user.permission);
     if (req.user.permission < 2)
       throw newError(
@@ -347,6 +348,24 @@ export const newMember: RequestHandler = async (req, res, next) => {
     });
 
     return res.status(201).json(newMember);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const resetViews: RequestHandler = async (req, res, next) => {
+  try {
+    if (!req.user) throw newError(401, "Unauthorized");
+    if (req.user.permission < 3)
+      throw newError(403, "Forbidden, Insufficient Permission");
+
+    const articleId = +req.params.id;
+    const result = await prisma.articles.update({
+      where: { id: articleId },
+      data: { views: 0 },
+    });
+
+    return res.status(200).json({ result });
   } catch (error) {
     next(error);
   }

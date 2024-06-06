@@ -14,7 +14,7 @@ declare global {
   namespace Express {
     interface Request {
       [key: string]: any;
-      user: members;
+      user: members | null;
     }
   }
   interface Error {

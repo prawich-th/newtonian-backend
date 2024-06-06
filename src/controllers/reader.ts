@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import newError from "../helpers/newError";
 import { prisma } from "../models/db";
+import RouteProtection from "../helpers/RouteProtection";
 
 export const getArticle: RequestHandler = async (req, res, next) => {
   try {
@@ -9,9 +10,31 @@ export const getArticle: RequestHandler = async (req, res, next) => {
     if (!articleId) throw new Error("Article Id Not Found");
 
     const article = await prisma.articles.findFirstOrThrow({
-      where: { id: +articleId, published: true },
+      where: { id: +articleId },
       include: { member: { select: { name: true, id: true, nickname: true } } },
     });
+
+    if (!article) throw newError(404, "Article Not Found");
+
+    if (article.published === false) {
+      const token = req.headers["authorization"] || null;
+      if (!token)
+        throw newError(
+          401,
+          "Unauthorized, Article is not published. Authorisation required"
+        );
+      try {
+        const user = await RouteProtection.getUserFromToken(token);
+
+        if (user.permission > 2) {
+          return res.json(article);
+        } else {
+          throw newError(403, "Forbidden");
+        }
+      } catch (error) {
+        throw newError(403, "Forbidden");
+      }
+    }
 
     await prisma.articles.update({
       where: { id: +articleId },

@@ -20,4 +20,11 @@ const verify: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { verify };
+const getUserFromToken = async (token: string) => {
+  const decoded = jwt.verify(token?.split(" ").pop(), process.env.TOKEN_SECRET);
+
+  return await prisma.members.findFirstOrThrow({
+    where: { id: decoded.userId },
+  });
+};
+export default { verify, getUserFromToken };

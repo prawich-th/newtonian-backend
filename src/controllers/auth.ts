@@ -43,6 +43,7 @@ export const signin: RequestHandler = async (req, res, next) => {
 
 export const ChangePassword: RequestHandler = async (req, res, next) => {
   try {
+    if (!req.user) throw newError(401, "Unauthorized");
     const superUserEditPassword = req.user.permission >= 4;
 
     if (!req.body.newPassword)
@@ -95,6 +96,7 @@ export const ChangePassword: RequestHandler = async (req, res, next) => {
 
 export const getUser: RequestHandler = async (req, res, next) => {
   try {
+    if (!req.user) throw newError(401, "Unauthorized");
     return res.json(req.user);
   } catch (error) {
     next(error);
