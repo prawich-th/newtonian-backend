@@ -28,6 +28,7 @@ router.get("/eics/get-articles", RouteProtection_1.default.verify, eics_1.getArt
 router.patch("/eics/patch-member/:id", RouteProtection_1.default.verify, eics_1.patchMember);
 router.get("/eics/get-all-issues", RouteProtection_1.default.verify, eics_1.getAllIssues);
 router.post("/eics/new-member", RouteProtection_1.default.verify, eics_1.newMember);
+router.patch("/eics/reset-views/:id", RouteProtection_1.default.verify, eics_1.resetViews);
 // member
 router.get("/member", member_1.getAllMembers);
 router.get("/member/:id", member_1.getMember);

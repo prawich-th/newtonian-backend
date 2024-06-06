@@ -26,4 +26,10 @@ const verify = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
         next(error);
     }
 });
-exports.default = { verify };
+const getUserFromToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
+    const decoded = jwt.verify(token === null || token === void 0 ? void 0 : token.split(" ").pop(), process.env.TOKEN_SECRET);
+    return yield db_1.prisma.members.findFirstOrThrow({
+        where: { id: decoded.userId },
+    });
+});
+exports.default = { verify, getUserFromToken };

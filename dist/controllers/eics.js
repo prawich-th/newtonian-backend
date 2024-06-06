@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.newMember = exports.getAllIssues = exports.patchMember = exports.getMembers = exports.publicationToggle = exports.deleteArticle = exports.getArticles = exports.importArticle = exports.fetchArticleFromGoogleDoc = exports.IssuePublicationToggle = exports.newArticle = exports.newIssue = exports.uploadImage = void 0;
+exports.resetViews = exports.newMember = exports.getAllIssues = exports.patchMember = exports.getMembers = exports.publicationToggle = exports.deleteArticle = exports.getArticles = exports.importArticle = exports.fetchArticleFromGoogleDoc = exports.IssuePublicationToggle = exports.newArticle = exports.newIssue = exports.uploadImage = void 0;
 const fs_1 = __importDefault(require("fs"));
 const sharp_1 = __importDefault(require("sharp"));
 const docs_md_1 = require("../helpers/docs-md");
@@ -163,6 +163,8 @@ const getArticles = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
 exports.getArticles = getArticles;
 const deleteArticle = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        if (!req.user)
+            throw (0, newError_1.default)(401, "Unauthorized");
         if (req.user.permission < 3)
             throw (0, newError_1.default)(403, "Forbidden, Insufficient Permission");
         const articleId = +req.params.id;
@@ -226,6 +228,8 @@ const PATCHMEMBER_PERMISSION_LVL4UP_KEYS = ["password", "memberSince", "id"];
 const patchMember = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const memberId = req.params.id;
+        if (!req.user)
+            throw (0, newError_1.default)(401, "Unauthorized");
         console.log(req.user.name, req.user.permission);
         if (req.user.permission < 2)
             throw (0, newError_1.default)(403, "Forbidden, Insufficient permission to access this api");
@@ -314,3 +318,21 @@ const newMember = (req, res, next) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.newMember = newMember;
+const resetViews = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        if (!req.user)
+            throw (0, newError_1.default)(401, "Unauthorized");
+        if (req.user.permission < 3)
+            throw (0, newError_1.default)(403, "Forbidden, Insufficient Permission");
+        const articleId = +req.params.id;
+        const result = yield db_1.prisma.articles.update({
+            where: { id: articleId },
+            data: { views: 0 },
+        });
+        return res.status(200).json({ result });
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.resetViews = resetViews;

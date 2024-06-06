@@ -15,15 +15,35 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.redirectMusical = exports.redirectLatestIssue = exports.viewPdf = exports.getAllArticle = exports.getHomePageData = exports.getIssue = exports.getAllIssues = exports.getArticle = void 0;
 const newError_1 = __importDefault(require("../helpers/newError"));
 const db_1 = require("../models/db");
+const RouteProtection_1 = __importDefault(require("../helpers/RouteProtection"));
 const getArticle = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const articleId = req.params.id;
         if (!articleId)
             throw new Error("Article Id Not Found");
         const article = yield db_1.prisma.articles.findFirstOrThrow({
-            where: { id: +articleId, published: true },
+            where: { id: +articleId },
             include: { member: { select: { name: true, id: true, nickname: true } } },
         });
+        if (!article)
+            throw (0, newError_1.default)(404, "Article Not Found");
+        if (article.published === false) {
+            const token = req.headers["authorization"] || null;
+            if (!token)
+                throw (0, newError_1.default)(401, "Unauthorized, Article is not published. Authorisation required");
+            try {
+                const user = yield RouteProtection_1.default.getUserFromToken(token);
+                if (user.permission > 2) {
+                    return res.json(article);
+                }
+                else {
+                    throw (0, newError_1.default)(403, "Forbidden");
+                }
+            }
+            catch (error) {
+                throw (0, newError_1.default)(403, "Forbidden");
+            }
+        }
         yield db_1.prisma.articles.update({
             where: { id: +articleId },
             data: {

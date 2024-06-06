@@ -55,6 +55,8 @@ const signin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* (
 exports.signin = signin;
 const ChangePassword = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        if (!req.user)
+            throw (0, newError_1.default)(401, "Unauthorized");
         const superUserEditPassword = req.user.permission >= 4;
         if (!req.body.newPassword)
             throw (0, newError_1.default)(400, "Bad Request, New Password Required");
@@ -96,6 +98,8 @@ const ChangePassword = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
 exports.ChangePassword = ChangePassword;
 const getUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        if (!req.user)
+            throw (0, newError_1.default)(401, "Unauthorized");
         return res.json(req.user);
     }
     catch (error) {
